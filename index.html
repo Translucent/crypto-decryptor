@@ -1,0 +1,75 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>The HTML5 Herald</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <script src="js/aes.min.js"></script>
+  <script src="js/hmac-sha256.min.js"></script>
+
+  <script type="text/javascript">
+
+  	$(function(){
+
+  		// take the "cryptotext" by URL parameter 'c'
+	  	var params_c = "U2FsdGVkX1+MdvgxLXZfHbohZT91lopN8xzIIzoA9VnK5i8y7cvN9hTJovuZ/X9Drecg3nkfOqYYalIkvbRV4uNrktFVz27aXcPLmaI+RSya/WoUQ0hkYaISf/wFpusZ+3WSCjCIEHTmh0yUz8NQmWSaFQPFgzyzbdcIKM+2/wVV6uyL+sHa216GYSHkYCZfwufD5iALmMlnkLCvFULSjTFmie++G5RplZCj/GhhNLAMxccoqzPwspwVJ504BQ9nm6I8+SjUhM35210yNtmmLCCFXZJ80z/5B/RiPW6QJdfgjPf6dLFDtW9YSMfCQcS1TPwaZ7kqTNeBSwPcPngVDxm4VI1zyZU7QINvYhHWfHGe6X5cevmycKXwUpSTRTJFs3UcoW3W519VShfTaCvkp+xfnEh297MrPPlGewRaEquHvoeQqdYtOCd9Z2x08WISL1WNPdm52qqZ09wOjFEkgOp3MvYogR5gEqeznAVi2H9UjHxmYpKmMiTx3W57kVx/V3APh3fDiJ2+1FN3uWMDy9lTA99goUFa4ZXshxiv1AoDhLZkkjlplZicERyHDSmeQlih4yIv/8/O1fKk4Brb/w==";
+	  	
+	  	// take the hashmac by URL parameter 'h'
+	  	var params_h = "d133aab8c72e82ccc045d09b3fca0b3070b48ba63b81368f4f87b469914e13c3";
+
+	  	$("#cryptotext").text(params_c);
+
+	  	$("#decryptbutton").click(function(){
+
+	  		var decrypt_result = CryptoJS.AES.decrypt( params_c, $("#password").val() ).toString(CryptoJS.enc.Utf8);			
+			var hmac = CryptoJS.HmacSHA256(decrypt_result, $("#password").val()).toString();
+
+			if(hmac == params_h) {
+
+				$("#result").empty();
+				$("<div>"+decrypt_result+"</div>").appendTo($("#result"));
+
+			} else {
+				alert("wrong encryption password");
+			}
+
+	  	});  	
+
+
+  	});
+  	
+  </script>
+
+  <style type="text/css">
+  	div { margin: 10px; }
+  </style>
+
+</head>
+
+<body>
+
+	<div> 
+		Cryptotext: <div id="cryptotext"></div>
+	</div>
+  
+	<div>
+		Encryption password: <input type="text" name="password" id="password" value="tCun2VukR86utCun2VukR86u" />
+	</div>
+
+	<form>
+		<div>
+			<input type="button" name="decrypt" id="decryptbutton" value="Decrypt" />
+		</div>
+
+		<div id="result">
+		</div>
+	</form>
+
+
+</body>
+</html>
